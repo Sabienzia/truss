@@ -26,9 +26,14 @@ import (
 var DefaultConfig svc.Config
 
 func init() {
-	flag.StringVar(&DefaultConfig.DebugAddr, "debug.addr", ":5060", "Debug and metrics listen address")
-	flag.StringVar(&DefaultConfig.HTTPAddr, "http.addr", ":5050", "HTTP listen address")
-	flag.StringVar(&DefaultConfig.GRPCAddr, "grpc.addr", ":5040", "gRPC (HTTP) listen address")
+
+    fs := flag.NewFlagSet("{{.Service.Name}}", flag.ContinueOnError)
+
+	fs.StringVar(&DefaultConfig.DebugAddr, "debug.addr", ":5060", "Debug and metrics listen address")
+	fs.StringVar(&DefaultConfig.HTTPAddr, "http.addr", ":5050", "HTTP listen address")
+	fs.StringVar(&DefaultConfig.GRPCAddr, "grpc.addr", ":5040", "gRPC (HTTP) listen address")
+
+    fs.Parse(os.Args)
 
 	// Use environment variables, if set. Flags have priority over Env vars.
 	if addr := os.Getenv("DEBUG_ADDR"); addr != "" {
